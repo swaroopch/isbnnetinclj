@@ -7,7 +7,7 @@
 (defn add-prices
   "TODO Store under :latest key and current timestamp keys"
   [prices]
-  (mc/insert PRICES_LOG (assoc prices :timestamp (java.util.Date.))))
+  (mc/insert PRICES_LOG {:timestamp (java.util.Date.) :prices prices}))
 
 (defn get-prices
   [isbn]
