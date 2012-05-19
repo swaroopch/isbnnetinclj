@@ -5,5 +5,6 @@
                            [noir "1.3.0-beta7"]
                            [hiccup "1.0.0"]
                            [com.novemberain/monger "1.0.0-beta6"]
-                           [joda-time "2.1"]]
+                           [joda-time "2.1"]
+                           [enlive "1.0.0"]]
             :main isbnnetinclj.server)
