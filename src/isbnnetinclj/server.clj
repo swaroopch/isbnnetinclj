@@ -14,7 +14,7 @@
   {:keys [isbn]}
   (let [prices (stores/sorted-search-all isbn)]
     (requestlog/add-log (dissoc (noir.request/ring-request) :body))
-    (priceslog/add-prices prices)
+    (priceslog/add-prices isbn prices)
     prices))
 
 (defn -main [& m]
