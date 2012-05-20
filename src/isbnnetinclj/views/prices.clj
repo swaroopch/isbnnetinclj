@@ -1,22 +1,25 @@
 (ns isbnnetinclj.views.prices
   (:require [isbnnetinclj.views.common :as common]
-            [noir.server]
             [noir.request]
-            [isbnnetinclj.models.mongodb :as mongodb]
             [isbnnetinclj.models.stores :as stores]
             [isbnnetinclj.models.requestlog :as requestlog]
             [isbnnetinclj.models.priceslog :as priceslog])
-  (:use [noir.core :only [defpage]]
-        [hiccup.core :only [html]]))
+  (:use [noir.core]
+        [hiccup.core]))
 
 (defpage isbn-page  "/:isbn"
   {:keys [isbn]}
-  (let [prices (stores/sorted-search-all isbn)]
+  (let [prices (stores/sorted-search-all isbn)
+        request_to_save (dissoc (noir.request/ring-request) :body)]
     (println (format "ISBN %s : prices are %s" isbn prices))
-    (requestlog/add-log (dissoc (noir.request/ring-request) :body))
+    (requestlog/add-log request_to_save)
     (priceslog/add-prices isbn prices)
-    prices))
+    (common/layout (format-prices prices))))
 
-(defn format-prices
+(defpartial format-price-store
+    [store]
+  [:li [:strong (first store)] [:span " : "] [:span.amount (last store)]])
+
+(defpartial format-prices
   [prices]
-  )
+  [:ul#prices (map format-price-store prices)])
