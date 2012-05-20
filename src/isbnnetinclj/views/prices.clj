@@ -17,8 +17,8 @@
     (common/layout (format-prices prices))))
 
 (defpartial format-price-store
-    [store]
-  [:li [:strong (first store)] [:span " : "] [:span.amount (last store)]])
+    [[store price]]
+  [:li [:strong store] [:span " : "] [:span.amount price]])
 
 (defpartial format-prices
   [prices]
