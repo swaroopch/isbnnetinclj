@@ -38,10 +38,6 @@
     (try (parse-page content price-path)
          (catch Exception x (str x)))))
 
-(defn add-price
-  [isbn site]
-  (assoc site :price (search isbn site)))
-
 (defn search-all
   [isbn]
   (zipmap
