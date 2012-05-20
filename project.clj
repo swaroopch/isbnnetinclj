@@ -4,6 +4,7 @@
                            [org.clojure/data.json "0.1.3"]
                            [noir "1.3.0-beta7"]
                            [hiccup "1.0.0"]
+                           [hiccup-bootstrap "0.1.0"]
                            [com.novemberain/monger "1.0.0-beta6"]
                            [joda-time "2.1"]
                            [enlive "1.0.0"]]

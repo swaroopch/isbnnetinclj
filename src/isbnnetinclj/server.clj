@@ -1,10 +1,13 @@
 (ns isbnnetinclj.server
   (:gen-class)
-  (:require [isbnnetinclj.models.mongodb :as mongodb])
+  (:require [noir.server]
+            [isbnnetinclj.models.mongodb :as mongodb]
+            [hiccup.bootstrap.middleware])
   (:use [noir.core]
          [isbnnetinclj.views.prices]))
 
 (noir.server/load-views "src/isbnnetinclj/views/")
+(noir.server/add-middleware hiccup.bootstrap.middleware/wrap-bootstrap-resources)
 
 (defn -main [& m]
   (let [mode (keyword (or (first m) :dev))

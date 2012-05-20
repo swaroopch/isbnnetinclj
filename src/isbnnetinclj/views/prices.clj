@@ -7,6 +7,14 @@
   (:use [noir.core]
         [hiccup.core]))
 
+(defpartial format-price-store
+    [[store price]]
+  [:li [:strong store] [:span " : "] [:span.amount price]])
+
+(defpartial format-prices
+  [prices]
+  [:ul#prices (map format-price-store prices)])
+
 (defpage isbn-page  "/:isbn"
   {:keys [isbn]}
   (let [prices (stores/sorted-search-all isbn)
@@ -15,11 +23,3 @@
     (requestlog/add-log request_to_save)
     (priceslog/add-prices isbn prices)
     (common/layout (format-prices prices))))
-
-(defpartial format-price-store
-    [[store price]]
-  [:li [:strong store] [:span " : "] [:span.amount price]])
-
-(defpartial format-prices
-  [prices]
-  [:ul#prices (map format-price-store prices)])

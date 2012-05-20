@@ -1,12 +1,17 @@
 (ns isbnnetinclj.views.common
-  (:use [noir.core :only [defpartial]]
-        [hiccup.page :only [include-css html5]]))
+  (:use [noir.core]
+        [hiccup.core]
+        [hiccup.page]
+        [hiccup.bootstrap.page]))
+
+; http://twitter.github.com/bootstrap/scaffolding.html
 
 (defpartial layout [& content]
             (html5
               [:head
                [:title "isbnnetinclj"]
-               (include-css "/css/reset.css")]
+               (include-bootstrap)
+               [:meta {:name "viewport" :content "width=device-width, initial-scale=1.0"}]]
               [:body
-               [:div#wrapper
+               [:div#content.container-fluid
                 content]]))
