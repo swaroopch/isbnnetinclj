@@ -4,7 +4,7 @@
             [isbnnetinclj.models.mongodb :as mongodb]
             [hiccup.bootstrap.middleware])
   (:use [noir.core]
-         [isbnnetinclj.views.prices]))
+         [isbnnetinclj.views.book]))
 
 (noir.server/load-views "src/isbnnetinclj/views/")
 (noir.server/add-middleware hiccup.bootstrap.middleware/wrap-bootstrap-resources)
