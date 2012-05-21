@@ -1,6 +1,5 @@
 (ns isbnnetinclj.models.mongodb
-  [:require [monger.core :as mg]
-   [monger.joda-time]])
+  [:require [monger.core :as mg]])
 
 (defn db-uri
   []

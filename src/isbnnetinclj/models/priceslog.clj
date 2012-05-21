@@ -1,6 +1,7 @@
 (ns isbnnetinclj.models.priceslog
   [:require [isbnnetinclj.models.mongodb]
-   [monger.collection :as mc]])
+   [monger.collection :as mc]
+   [monger.joda-time]])
 
 (def PRICES_LOG "priceslog")
 

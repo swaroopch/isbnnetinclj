@@ -6,6 +6,6 @@
                            [hiccup "1.0.0"]
                            [hiccup-bootstrap "0.1.0"]
                            [com.novemberain/monger "1.0.0-beta6"]
-                           [joda-time "2.1"]
+                           [clj-time "0.4.2"]
                            [enlive "1.0.0"]]
             :main isbnnetinclj.server)

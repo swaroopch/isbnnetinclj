@@ -1,6 +1,7 @@
 (ns isbnnetinclj.models.requestlog
   [:require [isbnnetinclj.models.mongodb]
-   [monger.collection :as mc]])
+   [monger.collection :as mc]
+   [monger.joda-time]])
 
 (defn add-details
   [request]
