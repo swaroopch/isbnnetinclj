@@ -23,15 +23,26 @@
    ])
 
 (defpartial format-prices
-  [prices]
-  [:ul#prices (map format-price-store prices)])
+  [{:keys [prices timestamp]}]
+  [:ul#prices (map format-price-store prices)]
+  [:p#when (str "Note: Prices as of " timestamp)])
+
+(defn prices-for-isbn
+  [isbn]
+  (let [stored-price
+        (priceslog/get-stored-price isbn)]
+    (if-not (nil? stored-price)
+      stored-price
+      (let [prices-for-isbn
+            (priceslog/prices-to-log isbn (stores/sorted-search-all isbn))]
+        (priceslog/add-prices prices-for-isbn)
+        prices-for-isbn))))
 
 (defpage isbn-page  "/:isbn"
   {:keys [isbn]}
-  (let [prices (stores/sorted-search-all isbn)
+  (let [prices-log (prices-for-isbn isbn)
         request-to-save (dissoc (noir.request/ring-request) :body)
         book-info (flipkart-book-info isbn)]
-    (println (format "ISBN %s : %s : prices are %s" isbn book-info prices))
     (requestlog/add-log request-to-save)
-    (priceslog/add-prices isbn prices)
-    (common/layout (format-book-info book-info) (format-prices prices))))
+    (println (format "ISBN %s : %s : prices are %s" isbn book-info prices-log))
+    (common/layout (format-book-info book-info) (format-prices prices-log))))
