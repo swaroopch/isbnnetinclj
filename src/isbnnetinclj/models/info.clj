@@ -1,14 +1,11 @@
 (ns isbnnetinclj.models.info
-  (:require [isbnnetinclj.models.stores :as stores]
-            [net.cgrand.enlive-html :as html]))
-
-(defn flipkart-book-url
-  [isbn]
-  (format (get-in stores/sites [:flipkart :url]) isbn))
+  (:require [net.cgrand.enlive-html :as html]
+            [isbnnetinclj.models.stores :as stores]
+            [isbnnetinclj.utils :as utils]))
 
 (defn flipkart-page-content
   [isbn]
-  (stores/fetch-url (flipkart-book-url isbn)))
+  (utils/fetch-url (stores/book-store-url :flipkart isbn)))
 
 (defn flipkart-image
   [content]

@@ -1,6 +1,7 @@
 (ns isbnnetinclj.models.stores
-  [:require [net.cgrand.enlive-html :as html]
-   [clojure.string :as string]])
+  (:require [clojure.string :as string]
+            [net.cgrand.enlive-html :as html]
+            [isbnnetinclj.utils :as utils]))
 
 ; http://enlive.cgrand.net/syntax.html
 (def sites
@@ -15,9 +16,9 @@
     :price-path [:span#productLayoutForm:OurPrice html/text]}
    })
 
-(defn fetch-url
-  [url]
-  (html/html-resource (java.net.URL. url)))
+(defn book-store-url
+  [store-name isbn]
+  (format (get-in sites [store-name :url]) isbn))
 
 (defn find-price-at-end
   [text]
@@ -31,19 +32,20 @@
         node (last nodes)]
     (find-price-at-end node)))
 
-(defn search
+(defn search-store
   [isbn {:keys [url price-path]}]
   (let [url (format url isbn)
-        content (fetch-url url)]
+        content (utils/fetch-url url)]
     (try (parse-page content price-path)
          (catch Exception x (str x)))))
 
-(defn search-all
+; TODO Do parallel fetching as per https://github.com/ghoseb/isbn.clj/blob/master/src/isbn/core.clj#L99
+(defn search-store-all
   [isbn]
   (zipmap
    (keys sites)
-   (map (partial search isbn) (vals sites))))
+   (map (partial search-store isbn) (vals sites))))
 
-(defn sorted-search-all
+(defn sorted-search-store-all
   [isbn]
-  (sort-by val (search-all isbn)))
+  (sort-by val (search-store-all isbn)))

@@ -34,8 +34,8 @@
     (if-not (nil? stored-price)
       stored-price
       (let [prices-for-isbn
-            (priceslog/prices-to-log isbn (stores/sorted-search-all isbn))]
-        (priceslog/add-prices prices-for-isbn)
+            (priceslog/prices-to-log-entry isbn (stores/sorted-search-store-all isbn))]
+        (priceslog/save-prices-log prices-for-isbn)
         prices-for-isbn))))
 
 (defpage isbn-page  "/:isbn"
@@ -43,6 +43,6 @@
   (let [prices-log (prices-for-isbn isbn)
         request-to-save (dissoc (noir.request/ring-request) :body)
         book-info (flipkart-book-info isbn)]
-    (requestlog/add-log request-to-save)
+    (requestlog/save-request-log-entry request-to-save)
     (println (format "ISBN %s : %s : prices are %s" isbn book-info prices-log))
     (common/layout (format-book-info book-info) (format-prices prices-log))))

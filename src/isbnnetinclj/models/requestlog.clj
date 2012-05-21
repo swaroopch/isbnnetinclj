@@ -3,16 +3,12 @@
    [monger.collection :as mc]
    [monger.joda-time]])
 
-(defn add-details
+(def REQUEST_LOG "requestlog")
+
+(defn add-details-to-log-entry
   [request]
   (assoc request :isbn (.substring (:uri request) 1)))
 
-(def REQUEST_LOG "requestlog")
-
-(defn add-log
+(defn save-request-log-entry
   [request]
-  (mc/insert REQUEST_LOG (add-details request)))
-
-(defn get-logs
-  []
-  (keep :isbn (mc/find-maps REQUEST_LOG)))
+  (mc/insert REQUEST_LOG (add-details-to-log-entry request)))
