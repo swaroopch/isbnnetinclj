@@ -8,6 +8,17 @@
         [hiccup.core]
         [isbnnetinclj.models.info :only [flipkart-book-info]]))
 
+(defn prices-for-isbn
+  [isbn]
+  (let [stored-price
+        (priceslog/get-stored-price isbn)]
+    (if-not (nil? stored-price)
+      stored-price
+      (do (future (let [prices-for-isbn
+            (priceslog/prices-to-log-entry isbn (stores/sorted-search-store-all isbn))]
+        (priceslog/save-prices-log prices-for-isbn)
+        prices-for-isbn)) {}))))
+
 (defpartial format-price-store
     [[store price]]
   [:li [:strong store] [:span " : "] [:span.amount price]])
@@ -26,17 +37,6 @@
   [{:keys [prices timestamp]}]
   [:ul#prices (map format-price-store prices)]
   [:p#when (str "Note: Prices as of " timestamp)])
-
-(defn prices-for-isbn
-  [isbn]
-  (let [stored-price
-        (priceslog/get-stored-price isbn)]
-    (if-not (nil? stored-price)
-      stored-price
-      (let [prices-for-isbn
-            (priceslog/prices-to-log-entry isbn (stores/sorted-search-store-all isbn))]
-        (priceslog/save-prices-log prices-for-isbn)
-        prices-for-isbn))))
 
 (defpage isbn-page  "/:isbn"
   {:keys [isbn]}
