@@ -33,10 +33,20 @@
    [:p#publisher "Publisher: " publisher]
    ])
 
-(defpartial format-prices
-  [{:keys [prices timestamp]}]
+(defpartial format-prices-present
+    [prices timestamp]
   [:ul#prices (map format-price-store prices)]
   [:p#when (str "Note: Prices as of " timestamp)])
+
+(defpartial format-prices-not-present
+    [& rest]
+  [:p (str "Please refresh in 60 seconds.")])
+
+(defn format-prices
+    [{:keys [prices timestamp]}]
+    (if-not (empty? prices)
+      (format-prices-present prices timestamp)
+      (format-prices-not-present)))
 
 (defpage isbn-page  "/:isbn"
   {:keys [isbn]}
