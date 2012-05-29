@@ -1,46 +1,61 @@
 {{>header}}
 
-{{#info}}
-  <dl id="prices">
-    <dt>
-      Title
-    </dt>
-    <dd>
-      {{title}}
-    </dd>
-    <dt>
-      Author
-    </dt>
-    <dd>
-      {{author}}
-    </dd>
-    <dt>
-      Year
-    </dt>
-    <dd>
-      {{publishing-date}}
-    </dd>
-    <dt>
-      Publisher
-    </dt>
-    <dd>
-      {{publisher}}
-    </dd>
-  </dl>
-  {{#image}}
-    <img src="{{image}}" alt="{{title}}"/>
-  {{/image}}
+ <div class="row-fluid">
+   <div class="span6">
+     {{#info}}
+       <table>
+         <tr>
+           <td>
+             Title:
+           </td>
+           <td>
+             {{title}}
+           </td>
+         </tr>
+         <tr>
+           <td>
+             Author:
+           </td>
+           <td>
+             {{author}}
+           </td>
+         </tr>
+         <tr>
+           <td>
+             Year:
+           </td>
+           <td>
+             {{publishing-date}}
+           </td>
+         </tr>
+         <tr>
+           <td>
+             Publisher:
+           </td>
+           <td>
+             {{publisher}}
+           </td>
+         </tr>
+       </table>
+       <p>
+         <strong>
+           TODO: Convert prices log to seq of hash-map, so that we can display using Mustache
+         </strong>
+         <br />
+         {{#prices}}
+           {{prices}}
+         {{/prices}}
+       </p>
+   </div>
+   <div class="span6">
+     <p>
+       {{#image}}
+         <img src="{{image}}" alt="{{title}}"/>
+       {{/image}}
+     </p>
+   </div>
+ </div>
 {{/info}}
-
-<p>
-  <strong>
-    TODO: Convert prices log to seq of hash-map, so that we can display using Mustache
-  </strong>
-  <br />
-  {{#prices}}
-    {{prices}}
-  {{/prices}}
-</p>
 
 <p>
   Link to this page: <a href="/{{isbn}}">http://isbn.net.in/{{isbn}}</a>
