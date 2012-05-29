@@ -1,0 +1,49 @@
+{{>header}}
+
+{{#info}}
+  <dl id="prices">
+    <dt>
+      Title
+    </dt>
+    <dd>
+      {{title}}
+    </dd>
+    <dt>
+      Author
+    </dt>
+    <dd>
+      {{author}}
+    </dd>
+    <dt>
+      Year
+    </dt>
+    <dd>
+      {{publishing-date}}
+    </dd>
+    <dt>
+      Publisher
+    </dt>
+    <dd>
+      {{publisher}}
+    </dd>
+  </dl>
+  {{#image}}
+    <img src="{{image}}" alt="{{title}}"/>
+  {{/image}}
+{{/info}}
+
+<p>
+  <strong>
+    TODO: Convert prices log to seq of hash-map, so that we can display using Mustache
+  </strong>
+  <br />
+  {{#prices}}
+    {{prices}}
+  {{/prices}}
+</p>
+
+<p>
+  Link to this page: <a href="/{{isbn}}">http://isbn.net.in/{{isbn}}</a>
+</p>
+
+{{>footer}}
