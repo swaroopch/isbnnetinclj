@@ -5,7 +5,7 @@
 
 (defn store-names
     []
-    (sort (map #(clojure.string/replace (str %1) ":" "") (keys sites))))
+    (sort (map name (keys sites))))
 
 (defn front-page-content
   []

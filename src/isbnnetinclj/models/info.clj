@@ -1,6 +1,7 @@
 (ns isbnnetinclj.models.info
   (:require [net.cgrand.enlive-html :as html]
             [isbnnetinclj.models.stores :as stores]
+            [isbnnetinclj.models.infolog :as infolog]
             [isbnnetinclj.utils :as utils]))
 
 (defn flipkart-page-content
@@ -9,7 +10,8 @@
 
 (defn flipkart-image
   [content]
-  (get-in (first (html/select content [:div#mprodimg-id :img])) [:attrs :src]))
+  (or (get-in (first (html/select content [:div#main-image-id :img#visible-image-small])) [:attrs :src])
+      (get-in (first (html/select content [:div#mprodimg-id :img])) [:attrs :src])))
 
 (defn flipkart-row
   [content row-number]
@@ -35,3 +37,12 @@
   (try
     (flipkart-details (flipkart-page-content isbn))
     (catch Exception _)))
+
+(defn get-book-info
+  [isbn]
+  (let [stored-info (infolog/get-stored-info isbn)]
+    (if stored-info stored-info
+        (do (let [new-info (flipkart-book-info isbn)
+                  new-info-entry (infolog/info-to-log-entry isbn new-info)]
+              (infolog/save-info-log new-info-entry)
+              new-info-entry)))))

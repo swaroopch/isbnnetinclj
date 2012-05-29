@@ -3,6 +3,7 @@
  <div class="row-fluid">
    <div class="span6">
      {{#info}}
+       <h3>Info</h3>
        <table>
          <tr>
            <td>
@@ -37,15 +38,29 @@
            </td>
          </tr>
        </table>
-       <p>
-         <strong>
-           TODO: Convert prices log to seq of hash-map, so that we can display using Mustache
-         </strong>
-         <br />
+       <h3>
+         Prices
+       </h3>
+       <ol>
          {{#prices}}
-           {{prices}}
+           <li>
+             <a href="{{url}}">{{name}}</a> : {{price}}
+           </li>
          {{/prices}}
-       </p>
+         {{^prices}}
+         <script type="text/javascript">
+         window.onload = function() {
+           setTimeout("location.reload(true)", 60 * 1000);
+         };
+         </script>
+         <p>
+           Fetching prices... will refresh automatically in 60 seconds.
+         </p>
+         {{/prices}}
+       </ol>
+       {{#when-prices}}
+         Prices as of {{when-prices}} (updated every 24 hours)
+       {{/when-prices}}
    </div>
    <div class="span6">
      <p>
@@ -56,9 +71,5 @@
    </div>
  </div>
 {{/info}}
-
-<p>
-  Link to this page: <a href="/{{isbn}}">http://isbn.net.in/{{isbn}}</a>
-</p>
 
 {{>footer}}
