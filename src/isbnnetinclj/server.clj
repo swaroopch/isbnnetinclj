@@ -1,9 +1,7 @@
 (ns isbnnetinclj.server
   (:gen-class)
   (:require [noir.server]
-            [isbnnetinclj.models.mongodb :as mongodb])
-  (:use [noir.core]
-        [isbnnetinclj.views.book]))
+            [isbnnetinclj.models.mongodb :as mongodb]))
 
 (noir.server/load-views "src/isbnnetinclj/views/")
 
