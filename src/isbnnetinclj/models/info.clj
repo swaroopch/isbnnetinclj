@@ -9,7 +9,7 @@
 
 (defn flipkart-image
   [content]
-  (get-in (first (html/select content [:div#main-image-id :img#visible-image-small])) [:attrs :src]))
+  (get-in (first (html/select content [:div#mprodimg-id :img])) [:attrs :src]))
 
 (defn flipkart-row
   [content row-number]
