@@ -1,6 +1,7 @@
 (ns isbnnetinclj.models.stores
   (:require [clojure.string :as string]
             [net.cgrand.enlive-html :as html]
+            [timbre.core :as log]
             [isbnnetinclj.utils :as utils]
             [isbnnetinclj.models.priceslog :as priceslog]))
 
@@ -47,8 +48,8 @@
   (let [stored-price
         (priceslog/get-stored-price isbn)]
     (if-not (nil? stored-price)
-      stored-price
-      (do (future (let [prices-for-isbn
+      (do (log/info (str "Using already stored price for " isbn)) stored-price)
+      (do (log/info (str "Fetching prices for " isbn)) (future (let [prices-for-isbn
             (priceslog/prices-to-log-entry isbn (fetch-prices-from-all isbn))]
         (priceslog/save-prices-log prices-for-isbn)
         prices-for-isbn)) {}))))

@@ -6,5 +6,6 @@
                            [com.novemberain/monger "1.0.0-beta6"]
                            [clj-time "0.4.2"]
                            [enlive "1.0.0"]
-                           [stencil "0.3.0-preview1"]]
+                           [stencil "0.3.0-preview1"]
+                           [timbre "0.5.1-SNAPSHOT"]]
             :main isbnnetinclj.server)
