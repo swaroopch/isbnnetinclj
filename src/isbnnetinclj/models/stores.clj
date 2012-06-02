@@ -20,9 +20,23 @@
 
 
 (defonce book-data-cache (atom (cache/ttl-cache-factory (* 60 60 24) {})))
+(defonce book-in-progress-lock (atom {}))
+(def book-data-collection "book_data")
 
 
-(def book-data-collection "book_data_log")
+(defn get-book-in-progress
+  [isbn]
+  (get @book-in-progress-lock isbn))
+
+
+(defn set-book-in-progress
+  [isbn]
+  (swap! book-in-progress-lock assoc isbn true))
+
+
+(defn done-book-in-progress
+  [isbn]
+  (swap! book-in-progress-lock dissoc isbn))
 
 
 (defn get-in-memory-book-data
@@ -68,12 +82,16 @@
 
 (defn fetch-book-data
   [isbn]
-  (doseq [f (map #(future (fetch-book-data-from-one-store isbn %)) sites)]
-    (deref f))
-  (swap! book-data-cache assoc-in [isbn :when] (java.util.Date.))
-  (let [data (get-in-memory-book-data isbn)]
-    (future (mc/insert book-data-collection data))
-    data))
+  (if-not (get-book-in-progress isbn)
+    (do
+      (set-book-in-progress isbn)
+      (doseq [f (map #(future (fetch-book-data-from-one-store isbn %)) sites)]
+        (deref f))
+      (swap! book-data-cache assoc-in [isbn :when] (java.util.Date.))
+      (done-book-in-progress isbn)
+      (let [data (get-in-memory-book-data isbn)]
+        (future (mc/insert book-data-collection data))
+        data))))
 
 
 (defn book-data
