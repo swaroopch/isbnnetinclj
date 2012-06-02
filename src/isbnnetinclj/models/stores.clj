@@ -72,8 +72,8 @@
 
 (defn fetch-book-data-from-one-store
   [isbn [site-name {:keys [url price-path]}]]
-  (let [url (format url isbn)
-        content (utils/fetch-url url)
+  (let [address (format url isbn)
+        content (utils/fetch-page address)
         price-data (parse-price-from-content content price-path)]
     (try (swap! book-data-cache
                 assoc-in [isbn :price site-name] price-data)
@@ -97,4 +97,4 @@
 (defn book-data
   [isbn]
   (or (get-stored-book-data isbn)
-      (do (future (fetch-book-data isbn)) {})))
+      (do (future (fetch-book-data isbn)) {:when (java.util.Date.)})))

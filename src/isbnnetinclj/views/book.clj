@@ -6,7 +6,8 @@
             [isbnnetinclj.utils :as utils])
   (:use [noir.core]
         [isbnnetinclj.models.info :only [book-info]]
-        [isbnnetinclj.models.stores :only [book-data]]))
+        [isbnnetinclj.models.stores :only [book-data sites]]
+        [clojure.pprint :only [pprint]]))
 
 
 (def request-collection "request")
@@ -19,12 +20,20 @@
    :when (java.util.Date.)})
 
 
+(defn convert-prices-for-display
+  [isbn prices]
+  (map (fn [[store-name price]]
+         {:name (name store-name)
+          :price price
+          :url (format (get-in sites [store-name :url]) isbn)}) prices))
+
+
 (defpage "/:isbn" {:keys [isbn]}
-  (let [prices-log (book-data isbn)
+  (let [data (book-data isbn)
         info (book-info isbn)]
     (mc/insert request-collection (core-details-of-request (noir.request/ring-request)))
-    (mus/render-file "book.mustache" {:prices (:prices prices-log)
-                                      :when-prices (utils/format-timestamp (:timestamp prices-log))
+    (mus/render-file "book.mustache" {:prices (convert-prices-for-display isbn (:price data))
+                                      :when-prices (utils/format-timestamp (:when data))
                                       :isbn isbn
                                       :info (:info info)
                                       :title (or (get-in book-info [:info :title]) "isbn.net.in")})))

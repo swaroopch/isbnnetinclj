@@ -4,9 +4,10 @@
             [monger.query :as mq]
             [monger.joda-time]
             [clj-time.core :as time]
-            [clj-time.format :as timeformat]))
+            [clj-time.format :as timeformat]
+            [clj-time.coerce :as timecoerce]))
 
-(defn fetch-url
+(defn fetch-page
   [url]
   (html/html-resource (java.net.URL. url)))
 
@@ -15,13 +16,13 @@
   (time/minus (time/now) (time/days 1)))
 
 (defn format-timestamp
-  [timestamp]
-  (timeformat/unparse (timeformat/formatters :rfc822) timestamp))
+  [when]
+  (timeformat/unparse (timeformat/formatters :rfc822) (timecoerce/from-date when)))
 
 (defn get-fresh-db-data
-  [db_collection isbn]
+  [collection-name isbn]
   (first (mq/with-collection
-           db_collection
+           collection-name
            (mq/find {:isbn isbn :when {"$gt" (twenty-four-hours-ago)}})
            (mq/sort {:when -1})
            (mq/limit 1))))

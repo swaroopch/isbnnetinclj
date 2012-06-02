@@ -4,7 +4,6 @@
             [net.cgrand.enlive-html :as html]
             [monger.collection :as mc]
             [isbnnetinclj.models.stores :as stores]
-            [isbnnetinclj.models.infolog :as infolog]
             [isbnnetinclj.utils :as utils]))
 
 
@@ -35,7 +34,7 @@
 
 (defn flipkart-page-content
   [isbn]
-  (utils/fetch-url (format (get-in stores/sites [:flipkart :url]) isbn)))
+  (utils/fetch-page (format (get-in stores/sites [:flipkart :url]) isbn)))
 
 
 (defn flipkart-image
@@ -66,7 +65,7 @@
             :publisher (book-row 7)}}))
 
 
-(defn flipkart-book-info
+(defn fetch-book-info
   [isbn]
   (try
     (let [info (flipkart-details isbn (flipkart-page-content isbn))]
@@ -79,4 +78,4 @@
 (defn book-info
   [isbn]
   (or (get-stored-book-info isbn)
-      (flipkart-book-info isbn)))
+      (fetch-book-info isbn)))
