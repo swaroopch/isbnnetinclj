@@ -1,17 +1,48 @@
 (ns isbnnetinclj.models.info
-  (:require [net.cgrand.enlive-html :as html]
+  (:require [timbre.core :as log]
+            [clojure.core.cache :as cache]
+            [net.cgrand.enlive-html :as html]
+            [monger.collection :as mc]
             [isbnnetinclj.models.stores :as stores]
             [isbnnetinclj.models.infolog :as infolog]
             [isbnnetinclj.utils :as utils]))
+
+
+(defonce book-info-cache (atom (cache/ttl-cache-factory (* 60 60 24) {})))
+(def book-info-collection "book_info")
+
+
+(defn get-in-memory-book-info
+  [isbn]
+  (get @book-info-cache isbn))
+
+
+(defn store-in-memory-book-info
+  [isbn book-info]
+  (get (swap! book-info-cache assoc isbn book-info) isbn))
+
+
+(defn get-db-book-info
+  [isbn]
+  (utils/get-fresh-db-data book-info-collection isbn))
+
+
+(defn get-stored-book-info
+  [isbn]
+  (or (get-in-memory-book-info isbn)
+      (get-db-book-info isbn)))
+
 
 (defn flipkart-page-content
   [isbn]
   (utils/fetch-url (format (get-in stores/sites [:flipkart :url]) isbn)))
 
+
 (defn flipkart-image
   [content]
   (or (get-in (first (html/select content [:div#main-image-id :img#visible-image-small])) [:attrs :src])
       (get-in (first (html/select content [:div#mprodimg-id :img])) [:attrs :src])))
+
 
 (defn flipkart-row
   [content row-number]
@@ -22,27 +53,30 @@
                                first
                                html/content])))
 
+
 (defn flipkart-details
-  [content]
+  [isbn content]
   (let [book-row (partial flipkart-row content)]
-    {:image (flipkart-image content)     
-     :title (book-row 1)
-     :author (book-row 2)
-     :publishing-date (book-row 6)
-     :publisher (book-row 7)
-     }))
+    {:isbn isbn
+     :when (java.util.Date.)
+     :info {:image (flipkart-image content)     
+            :title (book-row 1)
+            :author (book-row 2)
+            :publishing-date (book-row 6)
+            :publisher (book-row 7)}}))
+
 
 (defn flipkart-book-info
   [isbn]
   (try
-    (flipkart-details (flipkart-page-content isbn))
+    (let [info (flipkart-details isbn (flipkart-page-content isbn))]
+      (store-in-memory-book-info isbn info)
+      (future (mc/insert book-info-collection info))
+      info)
     (catch Exception _)))
 
-(defn get-book-info
+
+(defn book-info
   [isbn]
-  (let [stored-info (infolog/get-stored-info isbn)]
-    (if stored-info stored-info
-        (do (let [new-info (flipkart-book-info isbn)
-                  new-info-entry (infolog/info-to-log-entry isbn new-info)]
-              (infolog/save-info-log new-info-entry)
-              new-info-entry)))))
+  (or (get-stored-book-info isbn)
+      (flipkart-book-info isbn)))

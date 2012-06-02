@@ -22,6 +22,6 @@
   [db_collection isbn]
   (first (mq/with-collection
            db_collection
-           (mq/find {:isbn isbn :timestamp {"$gt" (twenty-four-hours-ago)}})
-           (mq/sort {:timestamp -1})
+           (mq/find {:isbn isbn :when {"$gt" (twenty-four-hours-ago)}})
+           (mq/sort {:when -1})
            (mq/limit 1))))
