@@ -6,7 +6,7 @@
 
 (defn flipkart-page-content
   [isbn]
-  (utils/fetch-url (stores/book-store-url :flipkart isbn)))
+  (utils/fetch-url (format (get-in stores/sites [:flipkart :url]) isbn)))
 
 (defn flipkart-image
   [content]
