@@ -85,11 +85,12 @@
   (if-not (get-book-in-progress isbn)
     (do
       (set-book-in-progress isbn)
-      (doseq [f (map #(future (fetch-book-data-from-one-store isbn %)) sites)]
+      (doseq [f (doall (map #(future (fetch-book-data-from-one-store isbn %)) sites))]
         (deref f))
       (swap! book-data-cache assoc-in [isbn :when] (java.util.Date.))
       (done-book-in-progress isbn)
-      (let [data (get-in-memory-book-data isbn)]
+      (let [data (get-in-memory-book-data isbn)
+            data (assoc data :isbn isbn)]
         (future (mc/insert book-data-collection data))
         data))))
 
