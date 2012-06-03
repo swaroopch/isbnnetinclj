@@ -14,9 +14,9 @@
 
 (defn core-details-of-request
   [request]
-  {:ip (get-in request [:headers :x-forwarded-for])
-   :user-agent (get-in request [:headers :user-agent])
-   :isbn (string/replace (get request :uri) "/" "")
+  {:ip (get-in request [:headers "x-forwarded-for"])
+   :user-agent (get-in request [:headers "user-agent"])
+   :isbn (string/replace (:uri request) "/" "")
    :when (java.util.Date.)})
 
 
