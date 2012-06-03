@@ -3,7 +3,9 @@
   (:require [noir.server]
             [isbnnetinclj.models.mongodb :as mongodb]))
 
+
 (noir.server/load-views "src/isbnnetinclj/views/")
+
 
 (defn -main [& m]
   (let [mode (keyword (or (first m) :dev))
