@@ -1,5 +1,6 @@
 (ns isbnnetinclj.views.book
-  (:require [clojure.string :as string]
+  (:require [timbre.core :as log]
+            [clojure.string :as string]
             [noir.request]
             [stencil.core :as mus]
             [monger.collection :as mc]
@@ -29,12 +30,21 @@
           :url (format (get-in sites [store-name :url]) isbn)}) prices))
 
 
-(defpage "/:isbn" {:keys [isbn]}
-  (let [data (book-data isbn)
-        info (book-info isbn)]
-    (mc/insert request-collection (core-details-of-request (noir.request/ring-request)))
-    (mus/render-file "book.mustache" {:prices (convert-prices-for-display isbn (:price data))
-                                      :when-prices (utils/format-timestamp (:when data))
-                                      :isbn isbn
-                                      :info (:info info)
-                                      :title (or (get-in book-info [:info :title]) "isbn.net.in")})))
+(defn is-isbn-valid
+  [isbn]
+  (or (re-matches #"^[0-9]{9}[0-9xX]$" isbn)
+      (re-matches #"^[0-9]{13}$" isbn)))
+
+
+(defpage book-page [:get ["/:isbn" :isbn #"[\d-]+[xX]?"]] {:keys [isbn]}
+  (let [isbn (string/replace isbn "-" "")]
+    (if (is-isbn-valid isbn)
+      ;; NOTE Launching price fetchers in background before starting info fetcher
+      (let [data (book-data isbn)
+            info (book-info isbn)]
+        (mc/insert request-collection (core-details-of-request (noir.request/ring-request)))
+        (mus/render-file "book.mustache" {:prices (convert-prices-for-display isbn (:price data))
+                                          :when-prices (utils/format-timestamp (or (:when data) (java.util.Date.)))
+                                          :isbn isbn
+                                          :info (:info info)
+                                          :title (or (get-in book-info [:info :title]) "isbn.net.in")})))))
