@@ -9,4 +9,8 @@
                            [enlive "1.0.0"]
                            [stencil "0.3.0-preview1"]
                            [timbre "0.5.1-SNAPSHOT"]]
-            :main isbnnetinclj.server)
+            :main isbnnetinclj.server
+            :license {:name "Eclipse Public License - v 1.0"
+                      :url "http://www.eclipse.org/legal/epl-v10.html"
+                      :distribution :repo
+                      :comments "same as Clojure"})
