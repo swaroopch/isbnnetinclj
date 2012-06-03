@@ -43,10 +43,11 @@
   (re-matches #"^[0-9]{13}$" isbn))
 
 
-;; http://refactormycode.com/codes/33-isbn10-to-isbn13#refactor_257 
+;; http://refactormycode.com/codes/33-isbn10-to-isbn13#refactor_257
+;; 0142000280 => 9780142000281
 (defn convert-isbn-10-to-13
   [isbn]
-  (let [x (map (comp #(Integer/parseInt %) str) (to-array isbn))
+  (let [x (map (comp #(Integer/parseInt %) str) isbn)
         sum-of-digits (+ 38
                          (* 3 (+ (nth x 0) (nth x 2) (nth x 4) (nth x 6) (nth x 8)))
                          (+ (nth x 1) (nth x 3) (nth x 5) (nth x 7)))
