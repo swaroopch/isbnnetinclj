@@ -1,6 +1,7 @@
 (ns isbnnetinclj.server
   (:gen-class)
-  (:require [noir.server]
+  (:require [timbre.core :as log]
+            [noir.server]
             [isbnnetinclj.models.mongodb :as mongodb]))
 
 
@@ -10,6 +11,6 @@
 (defn -main [& m]
   (let [mode (keyword (or (first m) :dev))
         port (Integer. (get (System/getenv) "PORT" "8080"))]
-    (println (str "Connecting to " (mongodb/db-uri)))
+    (log/info "Connecting to" (mongodb/db-uri))
     (mongodb/init-db)
     (noir.server/start port {:mode mode :ns 'isbnnetinclj})))
