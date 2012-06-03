@@ -13,6 +13,7 @@
 (def request-collection "request")
 
 (defn core-details-of-request
+  "NOTE This function should change if deployed outside Heroku"
   [request]
   {:ip (get-in request [:headers "x-forwarded-for"])
    :user-agent (get-in request [:headers "user-agent"])
