@@ -73,3 +73,21 @@
                                    :isbn isbn
                                    :info (:info info)
                                    :title (or (get-in info [:info :title]) "isbn.net.in")}))))))
+
+
+(defn prepare-data-for-json
+  [isbn {:keys [_id when price]}]
+  (log/debug "ISBN is" isbn)
+  {:isbn isbn
+   :when (str when)
+   :price price})
+
+
+(defpage book-json-page [:get ["/:isbn.json" :isbn #"[\d-]+[xX]?"]] {:keys [isbn]}
+  (let [isbn (strip-dashes isbn)]
+    (if (is-isbn-10 isbn)
+      (noir.response/redirect (str "/" (convert-isbn-10-to-13 isbn) ".json") :permanent)
+      (if (is-isbn-13 isbn)
+        (let [data (book-data isbn)]
+          (mc/insert request-collection (core-details-of-request (noir.request/ring-request)))
+          (noir.response/json (prepare-data-for-json isbn data)))))))
