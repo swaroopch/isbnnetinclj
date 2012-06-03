@@ -2,3 +2,9 @@
 .page-footer {
     margin-bottom: 20px;
 }
+
+.prices-as-of {
+    margin-top: 20px;
+    font-size: x-small;
+    color: gray;
+}

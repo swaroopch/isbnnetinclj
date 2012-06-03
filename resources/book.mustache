@@ -58,9 +58,10 @@
          </p>
          {{/prices}}
        </ol>
-       {{#when-prices}}
-         Prices as of {{when-prices}} (updated every 24 hours)
-       {{/when-prices}}
+       <div class="prices-as-of">
+         <i class="icon-info-sign"></i>
+         Prices refreshed after 24 hours
+       </div>
    </div>
    <div class="span6">
      <p>
