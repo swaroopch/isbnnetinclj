@@ -67,12 +67,14 @@
 
 (defn fetch-book-info
   [isbn]
+  (log/debug isbn "Fetching info")
   (try
     (let [info (flipkart-details isbn (flipkart-page-content isbn))]
+      (log/debug isbn "is" (get-in info [:info :title]) "by" (get-in info [:info :author]))
       (store-in-memory-book-info isbn info)
       (future (mc/insert book-info-collection info))
       info)
-    (catch Exception _)))
+    (catch Exception x (do (log/error isbn (str x) nil)))))
 
 
 (defn book-info

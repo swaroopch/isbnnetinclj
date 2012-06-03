@@ -72,12 +72,14 @@
 
 (defn fetch-book-data-from-one-store
   [isbn [site-name {:keys [url price-path]}]]
+  (log/debug isbn "Launching fetcher" site-name)
   (let [address (format url isbn)
         content (utils/fetch-page address)
         price-data (parse-price-from-content content price-path)]
+    (log/debug isbn "Finished fetching" site-name)
     (try (swap! book-data-cache
                 assoc-in [isbn :price site-name] price-data)
-         (catch Exception x (do (log/error (str x)) {:error (str x)})))))
+         (catch Exception x (do (log/error isbn (str x)) {:error (str x)})))))
 
 
 (defn fetch-book-data
@@ -85,14 +87,19 @@
   (if-not (get-book-in-progress isbn)
     (do
       (set-book-in-progress isbn)
+      (log/debug isbn "Launching fetchers")
       (doseq [f (doall (map #(future (fetch-book-data-from-one-store isbn %)) sites))]
         (deref f))
       (swap! book-data-cache assoc-in [isbn :when] (java.util.Date.))
+      (log/debug isbn "Done")
       (done-book-in-progress isbn)
       (let [data (get-in-memory-book-data isbn)
             data (assoc data :isbn isbn)]
         (future (mc/insert book-data-collection data))
-        data))))
+        data))
+    (do
+      (log/debug isbn "already in progress")
+      nil)))
 
 
 (defn book-data
