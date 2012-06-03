@@ -6,7 +6,7 @@ Written using [Clojure](http://clojure.org) programming language.
 
 Special thanks to @ghoseb for the inspiration and [guidance](https://github.com/ghoseb/isbn.clj/blob/master/src/isbn/core.clj).
 
-If you're curious about the history of the project, [read these blog posts](http://www.swaroopch.com/blog/tab/isbnnetin/).
+If you're curious about the history of the project, [read these blog posts](http://www.swaroopch.com/blog/tag/isbnnetin/).
 
 ## Usage
 
