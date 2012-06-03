@@ -25,11 +25,12 @@
 
 (defn convert-prices-for-display
   [isbn prices]
-  (sort-by :price (map (fn [[store-name price]]
-                         {:name (name store-name)
-                          :price price
-                          :url (format (get-in sites [store-name :url]) isbn)})
-                       prices)))
+  (map #(assoc % :price (if (= (Integer/MAX_VALUE) (:price %)) "not available" (:price %)))
+       (sort-by :price (map (fn [[store-name price]]
+                              {:name (name store-name)
+                               :price price
+                               :url (format (get-in sites [store-name :url]) isbn)})
+                            prices))))
 
 
 (defn is-isbn-10

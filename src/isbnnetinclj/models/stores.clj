@@ -65,7 +65,7 @@
   (let [nodes (html/select content path)
         text (last nodes)]
     (if (empty? text)
-      -1
+      (Integer/MAX_VALUE)
       (try (Float/parseFloat (last (re-seq #"\d+(?:\.\d+)?" (string/trim (string/replace (str text) "," "")))))
            (catch Exception x (do (log/error (str x)) (str x)))))))
 
