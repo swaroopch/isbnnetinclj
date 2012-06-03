@@ -44,7 +44,7 @@
             info (book-info isbn)]
         (mc/insert request-collection (core-details-of-request (noir.request/ring-request)))
         (mus/render-file "book" {:prices (convert-prices-for-display isbn (:price data))
-                                 :when-prices (utils/format-timestamp (or (:when data) (java.util.Date.)))
+                                 :when-prices (or (:when data) (java.util.Date.))
                                  :isbn isbn
                                  :info (:info info)
                                  :title (or (get-in info [:info :title]) "isbn.net.in")})))))

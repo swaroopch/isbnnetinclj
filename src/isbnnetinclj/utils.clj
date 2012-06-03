@@ -3,8 +3,7 @@
             [monger.collection :as mc]
             [monger.query :as mq]
             [monger.joda-time]
-            [clj-time.core :as time]
-            [clj-time.format :as timeformat]))
+            [clj-time.core :as time]))
 
 (defn fetch-page
   [url]
@@ -13,10 +12,6 @@
 (defn twenty-four-hours-ago
   []
   (time/minus (time/now) (time/days 1)))
-
-(defn format-timestamp
-  [when]
-  (timeformat/unparse (timeformat/formatters :rfc822) when))
 
 (defn get-fresh-db-data
   [collection-name isbn]
