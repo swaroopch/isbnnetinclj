@@ -4,8 +4,7 @@
             [monger.query :as mq]
             [monger.joda-time]
             [clj-time.core :as time]
-            [clj-time.format :as timeformat]
-            [clj-time.coerce :as timecoerce]))
+            [clj-time.format :as timeformat]))
 
 (defn fetch-page
   [url]
@@ -17,7 +16,7 @@
 
 (defn format-timestamp
   [when]
-  (timeformat/unparse (timeformat/formatters :rfc822) (timecoerce/from-date when)))
+  (timeformat/unparse (timeformat/formatters :rfc822) when))
 
 (defn get-fresh-db-data
   [collection-name isbn]
