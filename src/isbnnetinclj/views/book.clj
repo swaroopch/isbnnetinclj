@@ -24,10 +24,10 @@
 
 (defn convert-prices-for-display
   [isbn prices]
-  (map (fn [[store-name price]]
-         {:name (name store-name)
-          :price price
-          :url (format (get-in sites [store-name :url]) isbn)}) prices))
+  (sort-by :price (map (fn [[store-name price]]
+                         {:name (name store-name)
+                          :price price
+                          :url (format (get-in sites [store-name :url]) isbn)}) prices)))
 
 
 (defn is-isbn-valid
