@@ -47,4 +47,4 @@
                                           :when-prices (utils/format-timestamp (or (:when data) (java.util.Date.)))
                                           :isbn isbn
                                           :info (:info info)
-                                          :title (or (get-in book-info [:info :title]) "isbn.net.in")})))))
+                                 :title (or (get-in info [:info :title]) "isbn.net.in")})))))
