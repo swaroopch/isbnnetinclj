@@ -88,7 +88,7 @@
     (do
       (set-book-in-progress isbn)
       (log/debug isbn "Launching fetchers")
-      (doseq [f (doall (map #(future (fetch-book-data-from-one-store isbn %)) sites))]
+      (doseq [f (mapv #(future (fetch-book-data-from-one-store isbn %)) sites)]
         (deref f))
       (swap! book-data-cache assoc-in [isbn :when] (java.util.Date.))
       (log/debug isbn "Done")
