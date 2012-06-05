@@ -11,7 +11,7 @@
 
 ;; http://enlive.cgrand.net/syntax.html
 ;; NOTE about other stores:
-;; - Pustak.co.in is slow
+;; - Pustak.co.in times out
 ;; - LandmarkOnTheNet.com times out
 ;; - Uread.com times out
 (def sites
@@ -23,8 +23,6 @@
               :price-path [:span.infiPrice html/text]}
    :indiaplaza {:url "http://www.indiaplaza.com/searchproducts.aspx?sn=books&affid=110550&q=%s"
                 :price-path [:div.ourPrice :span.blueFont html/text]}
-   :pustak {:url "http://pustak.co.in/pustak/books/search?searchType=book&q=%s&page=1&type=genericSearch"
-            :price-path [:span.prod_pg_prc_font html/text]}
    :crossword {:url "http://www.crossword.in/books/search?q=%s"
                :price-path [:span.variant-final-price html/text]}})
 
