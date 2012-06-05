@@ -11,7 +11,7 @@
 
 ;; http://enlive.cgrand.net/syntax.html
 (def sites
-  {:flipkart {:url "http://www.flipkart.com/search.php?query=%s"
+  {:flipkart {:url "http://www.flipkart.com/search.php?query=%s&affid=INSwaroCom"
               :price-path [:span#fk-mprod-our-id html/content]}
    :homeshop18 {:url "http://www.homeshop18.com/search:%s/categoryid:10000"
                 :price-path [:span#productLayoutForm:OurPrice html/text]}
