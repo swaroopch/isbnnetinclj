@@ -29,6 +29,11 @@
                :price-path [:span.variant-final-price html/text]}})
 
 
+(defn kindle-page
+  [isbn]
+  (format "http://www.amazon.com/s?ie=UTF8&rh=n%%3A1286228011%%2Ck%%3A%s&page=1" isbn))
+
+
 (defonce book-data-cache (atom (cache/ttl-cache-factory (* 60 60 24) {})))
 (defonce book-in-progress-lock (atom {}))
 (def book-data-collection "book_data")

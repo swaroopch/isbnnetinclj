@@ -47,6 +47,11 @@
              <a href="{{url}}">{{name}}</a> : {{price}}
            </li>
          {{/prices}}
+         {{#kindle-page}}
+           <li>
+             <a href="{{.}}">Kindle edition</a> : <a href="{{.}}">click to see page</a>
+           </li>
+         {{/kindle-page}}
          {{^prices}}
          <script type="text/javascript">
          window.onload = function() {

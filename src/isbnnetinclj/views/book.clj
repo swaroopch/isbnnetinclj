@@ -8,7 +8,7 @@
             [isbnnetinclj.utils :as utils])
   (:use [noir.core]
         [isbnnetinclj.models.info :only [book-info]]
-        [isbnnetinclj.models.stores :only [book-data sites]]
+        [isbnnetinclj.models.stores :only [book-data sites kindle-page]]
         [clojure.pprint :only [pprint]]))
 
 
@@ -62,7 +62,7 @@
   (string/replace text "-" ""))
 
 
-(defpage book-page [:get ["/:isbn" :isbn #"[\d-]+[xX]?"]] {:keys [isbn]}
+(defpage [:get ["/:isbn" :isbn #"[\d-]+[xX]?"]] {:keys [isbn]}
   (let [isbn (strip-dashes isbn)]
     (if (is-isbn-10 isbn)
       (noir.response/redirect (str "/" (convert-isbn-10-to-13 isbn)) :permanent)
@@ -73,7 +73,8 @@
           (mus/render-file "book" {:prices (convert-prices-for-display isbn (:price data))
                                    :isbn isbn
                                    :info (:info info)
-                                   :title (or (get-in info [:info :title]) "isbn.net.in")}))))))
+                                   :title (or (get-in info [:info :title]) "isbn.net.in")
+                                   :kindle-page (if (boolean (not-empty (keys (:price data)))) (kindle-page isbn))}))))))
 
 
 (defn prepare-data-for-json
@@ -84,7 +85,7 @@
    :price price})
 
 
-(defpage book-json-page [:get ["/:isbn.json" :isbn #"[\d-]+[xX]?"]] {:keys [isbn]}
+(defpage [:get ["/:isbn.json" :isbn #"[\d-]+[xX]?"]] {:keys [isbn]}
   (let [isbn (strip-dashes isbn)]
     (if (is-isbn-10 isbn)
       (noir.response/redirect (str "/" (convert-isbn-10-to-13 isbn) ".json") :permanent)
