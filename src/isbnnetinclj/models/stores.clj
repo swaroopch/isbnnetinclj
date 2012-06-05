@@ -10,13 +10,23 @@
 
 
 ;; http://enlive.cgrand.net/syntax.html
+;; NOTE about other stores:
+;; - Pustak.co.in is slow
+;; - LandmarkOnTheNet.com times out
+;; - Uread.com times out
 (def sites
   {:flipkart {:url "http://www.flipkart.com/search.php?query=%s&affid=INSwaroCom"
               :price-path [:span#fk-mprod-our-id html/content]}
    :homeshop18 {:url "http://www.homeshop18.com/search:%s/categoryid:10000"
                 :price-path [:span#productLayoutForm:OurPrice html/text]}
    :infibeam {:url "http://www.infibeam.com/Books/search?q=%s"
-              :price-path [:span.infiPrice html/text]}})
+              :price-path [:span.infiPrice html/text]}
+   :indiaplaza {:url "http://www.indiaplaza.com/searchproducts.aspx?sn=books&affid=110550&q=%s"
+                :price-path [:div.ourPrice :span.blueFont html/text]}
+   :pustak {:url "http://pustak.co.in/pustak/books/search?searchType=book&q=%s&page=1&type=genericSearch"
+            :price-path [:span.prod_pg_prc_font html/text]}
+   :crossword {:url "http://www.crossword.in/books/search?q=%s"
+               :price-path [:span.variant-final-price html/text]}})
 
 
 (defonce book-data-cache (atom (cache/ttl-cache-factory (* 60 60 24) {})))
@@ -83,6 +93,13 @@
 
 
 (defn fetch-book-data
+  {:test #(assert (= {:price {:flipkart 2011.0
+                              :homeshop18 1542.0
+                              :infibeam 1959.0
+                              :indiaplaza 1856.0
+                              :pustak 1299.0
+                              :crossword 1926.0}}
+                     (dissoc (fetch-book-data "9781449394707") :when :isbn)))}
   [isbn]
   (if-not (get-book-in-progress isbn)
     (do
