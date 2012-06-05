@@ -83,13 +83,15 @@
 (defn fetch-book-data-from-one-store
   [isbn [site-name {:keys [url price-path]}]]
   (log/debug isbn "Launching fetcher" site-name)
-  (let [address (format url isbn)
-        content (utils/fetch-page address)
-        price-data (parse-price-from-content content price-path)]
-    (log/debug isbn "Finished fetching" site-name)
-    (try (swap! book-data-cache
-                assoc-in [isbn :price site-name] price-data)
-         (catch Exception x (do (log/error isbn (str x)) {:error (str x)})))))
+  (try
+    (let [address (format url isbn)
+          content (utils/fetch-page address)
+          price-data (parse-price-from-content content price-path)]
+      (log/debug isbn "Finished fetching" site-name)
+      (swap! book-data-cache assoc-in [isbn :price site-name] price-data))
+    (catch Exception x (do
+                         (log/error isbn (str x))
+                         (swap! book-data-cache assoc-in [isbn :price site-name] (Integer/MAX_VALUE))))))
 
 
 (defn fetch-book-data
