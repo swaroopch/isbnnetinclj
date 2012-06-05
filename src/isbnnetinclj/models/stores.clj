@@ -91,8 +91,9 @@
       (doseq [f (mapv #(future (fetch-book-data-from-one-store isbn %)) sites)]
         (deref f))
       (swap! book-data-cache assoc-in [isbn :when] (java.util.Date.))
-      (log/debug isbn "Done")
+      ;; There is a race condition here, but for this project, it is not critical.
       (done-book-in-progress isbn)
+      (log/debug isbn "Done")
       (let [data (get-in-memory-book-data isbn)
             data (assoc data :isbn isbn)]
         (future (mc/insert book-data-collection data))
