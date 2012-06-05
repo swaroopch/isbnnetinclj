@@ -44,8 +44,9 @@
 
 
 ;; http://refactormycode.com/codes/33-isbn10-to-isbn13#refactor_257
-;; 0142000280 => 9780142000281
 (defn convert-isbn-10-to-13
+  ;; http://clojuredocs.org/clojure_core/clojure.core/test
+  {:test #(assert (= "9780142000281" (convert-isbn-10-to-13 "0142000280")))}
   [isbn]
   (let [x (map (comp #(Integer/parseInt %) str) isbn)
         sum-of-digits (+ 38
