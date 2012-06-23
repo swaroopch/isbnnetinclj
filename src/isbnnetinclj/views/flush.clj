@@ -1,0 +1,15 @@
+(ns isbnnetinclj.views.flush
+  (:require [timbre.core :as log]
+            [noir.core :refer :all]
+            [isbnnetinclj.models.info :refer [book-info-cache]]
+            [isbnnetinclj.models.stores :refer [book-data-cache book-in-progress-lock]]))
+
+
+(defpage "/flush/:password" {:keys [password]}
+  (if (= (System/getenv "FLUSH_PASSWORD") password)
+    (do
+      (reset! book-info-cache {})
+      (reset! book-data-cache {})
+      (reset! book-in-progress-lock {})
+      "Flushed!")
+    "You don't have permission"))
