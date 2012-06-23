@@ -25,7 +25,8 @@
        (frequencies)
        (sort-by val)
        (reverse)
-       (take 20)))
+       (take 20)
+       (remove #(= "9781449394707" (key %))))) ; remove the example isbn on the front page
 
 
 (defn get-db-books-in-past-24-hours
