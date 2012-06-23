@@ -2,9 +2,11 @@
   (:gen-class)
   (:require [timbre.core :as log]
             [noir.server]
-            [isbnnetinclj.models.mongodb :as mongodb]))
+            [isbnnetinclj.models.mongodb :as mongodb]
+            [isbnnetinclj.middleware.block :refer [block-bots]]))
 
 
+(noir.server/add-middleware block-bots)
 (noir.server/load-views "src/isbnnetinclj/views/")
 
 
