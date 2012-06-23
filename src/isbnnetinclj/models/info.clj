@@ -45,12 +45,12 @@
 
 (defn flipkart-row
   [content row-number]
-  (first (html/select content [:div#details
-                               :table.fk-specs-type1
-                               [:tr (html/nth-of-type row-number)]
-                               [:td (html/nth-of-type 2)]
-                               first
-                               html/content])))
+  (html/text (first (html/select content [:div#details
+                                          :table.fk-specs-type1
+                                          [:tr (html/nth-of-type row-number)]
+                                          [:td (html/nth-of-type 2)]
+                                          first
+                                          html/text]))))
 
 
 (defn flipkart-details
