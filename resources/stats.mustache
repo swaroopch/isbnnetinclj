@@ -1,22 +1,31 @@
 {{>header}}
 
-<div class="row-fluid">
-  <h2>
-    Popular books in past 24 hours
-  </h2>
-  <ul>
-    {{#books}}
-      <li>
-        <a href="/{{isbn}}">{{isbn}}</a> : {{title}} by {{author}}
-      </li>
-    {{/books}}
-  </ul>
-  <p>
-    <small>
-      <i class="icon-info-sign"></i>
-      Note: This list will be refreshed hourly.
-    </small>
-  </p>
-</div>
+<h2>
+  Popular books in past 24 hours
+</h2>
+
+<table class="table" cellpadding="10px">
+  {{#books}}
+    {{#title}}
+      <tr>
+        <td style="text-align: center; vertical-align: middle;">
+          {{#image}}
+            <img src="{{image}}" alt="{{title}}"/>
+          {{/image}}
+        </td>
+        <td style="vertical-align: middle;">
+          <a href="/{{isbn}}">{{isbn}}</a> : {{title}} by {{author}}
+        </td>
+      </tr>
+    {{/title}}
+  {{/books}}
+</table>
+
+<p>
+  <small>
+    <i class="icon-info-sign"></i>
+    Note: This list will be refreshed hourly.
+  </small>
+</p>
 
 {{>footer}}
