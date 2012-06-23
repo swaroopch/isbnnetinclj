@@ -1,7 +1,7 @@
 (ns isbnnetinclj.views.frontpage
-  (:use [noir.core]
-        [isbnnetinclj.models.stores :only [sites]])
-  (:require [stencil.core :as mus]))
+  (:require [noir.core :refer :all]
+            [stencil.core :as mus]
+            [isbnnetinclj.models.stores :refer [sites]]))
 
 
 (defn store-names

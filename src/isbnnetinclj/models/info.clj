@@ -3,12 +3,12 @@
             [clojure.core.cache :as cache]
             [net.cgrand.enlive-html :as html]
             [monger.collection :as mc]
+            [isbnnetinclj.models.constants :refer :all]
             [isbnnetinclj.models.stores :as stores]
             [isbnnetinclj.utils :as utils]))
 
 
 (defonce book-info-cache (atom (cache/ttl-cache-factory (* 60 60 24) {})))
-(def book-info-collection "book_info")
 
 
 (defn get-in-memory-book-info
@@ -58,7 +58,7 @@
   (let [book-row (partial flipkart-row content)]
     {:isbn isbn
      :when (java.util.Date.)
-     :info {:image (flipkart-image content)     
+     :info {:image (flipkart-image content)
             :title (book-row 1)
             :author (book-row 2)
             :publishing-date (book-row 6)

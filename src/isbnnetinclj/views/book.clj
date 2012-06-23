@@ -1,18 +1,17 @@
 (ns isbnnetinclj.views.book
   (:require [timbre.core :as log]
+            [clojure.pprint :refer [pprint]]
             [clojure.string :as string]
+            [noir.core :refer :all]
             [noir.request]
             [noir.response]
             [stencil.core :as mus]
             [monger.collection :as mc]
-            [isbnnetinclj.utils :as utils])
-  (:use [noir.core]
-        [isbnnetinclj.models.info :only [book-info]]
-        [isbnnetinclj.models.stores :only [book-data sites kindle-page]]
-        [clojure.pprint :only [pprint]]))
+            [isbnnetinclj.models.constants :refer :all]
+            [isbnnetinclj.models.info :refer [book-info]]
+            [isbnnetinclj.models.stores :refer [book-data sites kindle-page]]
+            [isbnnetinclj.utils :as utils]))
 
-
-(def request-collection "request")
 
 (defn core-details-of-request
   "NOTE This function should change if deployed outside Heroku"

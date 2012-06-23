@@ -1,11 +1,12 @@
 (ns isbnnetinclj.models.stores
   (:require [timbre.core :as log]
-            [clojure.string :as string]            
+            [clojure.string :as string]
             [clojure.core.cache :as cache]
             [net.cgrand.enlive-html :as html]
             [monger.collection :as mc]
             [monger.joda-time]
             [clj-time.core :as time]
+            [isbnnetinclj.models.constants :refer :all]
             [isbnnetinclj.utils :as utils]))
 
 
@@ -34,7 +35,6 @@
 
 (defonce book-data-cache (atom (cache/ttl-cache-factory (* 60 60 24) {})))
 (defonce book-in-progress-lock (atom {}))
-(def book-data-collection "book_data")
 
 
 (defn get-book-in-progress
