@@ -14,7 +14,8 @@
 ;; NOTE about other stores:
 ;; - Pustak.co.in times out
 ;; - LandmarkOnTheNet.com times out
-;; - Uread.com times out
+;; - Uread.com times out and throws 500" internal server errors
+;; - Indiaplaza throws 404 error if we try to fetch prices while it works fine in a browser
 (def sites
   {:flipkart {:url "http://www.flipkart.com/search.php?query=%s&affid=INSwaroCom"
               :price-path [:span#fk-mprod-our-id html/content]}
@@ -22,10 +23,12 @@
                 :price-path [:span#productLayoutForm:OurPrice html/text]}
    :infibeam {:url "http://www.infibeam.com/Books/search?q=%s"
               :price-path [:span.infiPrice html/text]}
-   ;; :indiaplaza {:url "http://www.indiaplaza.com/searchproducts.aspx?sn=books&affid=110550&q=%s"
-   ;;              :price-path [:div.ourPrice :span.blueFont html/text]}
    :crossword {:url "http://www.crossword.in/books/search?q=%s"
-               :price-path [:span.variant-final-price html/text]}})
+               :price-path [:span.variant-final-price html/text]}
+   :bookadda {:url "http://www.bookadda.com/general-search?searchkey=%s"
+              :price-path [:span.actlprc]}
+   :uread {:url "http://www.uread.com/search-books/%s"
+           :price-path [:p.our-price :label [:span (html/nth-of-type 1)] first]}})
 
 
 (defn kindle-page
