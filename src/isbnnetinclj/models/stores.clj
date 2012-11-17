@@ -14,7 +14,6 @@
 ;; NOTE about other stores:
 ;; - Pustak.co.in times out
 ;; - LandmarkOnTheNet.com times out
-;; - Uread.com times out and throws 500 internal server errors
 ;; - Indiaplaza throws 404 error if we try to fetch prices while it works fine in a browser
 ;; - Disabling uread because it sends USD instead of INR when query sent from Heroku (as opposed to my laptop)
 (def sites
