@@ -27,7 +27,7 @@
                :price-path [:span.variant-final-price html/text]}
    :bookadda {:url "http://www.bookadda.com/general-search?searchkey=%s"
               :price-path [:span.actlprc]}
-   :uread {:url "http://www.uread.com/search-books/%s"
+   :uread {:url "http://www.uread.com/book/isbnnetin/%s"
            :price-path [:p.our-price :label#ctl00_phBody_ProductDetail_lblourPrice first]}})
 
 
