@@ -39,11 +39,11 @@
 
 (defn flipkart-image
   [content]
-  (or (get-in (first (html/select content [:div#main-image-id :img#visible-image-small])) [:attrs :src])
-      (get-in (first (html/select content [:div#mprodimg-id :img])) [:attrs :src])))
+  (or (get-in (first (html/select content [:div#mprodimg-id :img])) [:attrs :data-src])
+      (get-in (first (html/select content [:div#main-image-id :img#visible-image-small])) [:attrs :src])))
 
 
-(defn flipkart-row
+(defn flipkart-row-1
   [content row-number]
   (html/text (first (html/select content [:div#details
                                           :table.fk-specs-type1
@@ -53,16 +53,50 @@
                                           html/text]))))
 
 
-(defn flipkart-details
+(defn flipkart-row-2
+  [content row-number]
+  (html/text (first (html/select content [:div#specifications
+                                          :table.fk-specs-type2
+                                          [:tr (html/nth-of-type row-number)]
+                                          [:td (html/nth-of-type 2)]
+                                          first]))))
+
+
+(defn flipkart-details-1
   [isbn content]
-  (let [book-row (partial flipkart-row content)]
-    {:isbn isbn
-     :when (java.util.Date.)
-     :info {:image (flipkart-image content)
-            :title (book-row 1)
-            :author (book-row 2)
-            :publishing-date (book-row 6)
-            :publisher (book-row 7)}}))
+  (let [book-row (partial flipkart-row-1 content)
+        book-details {:isbn isbn
+                      :when (java.util.Date.)
+                      :info {:image (flipkart-image content)
+                             :title (book-row 1)
+                             :author (book-row 2)
+                             :publishing-date (book-row 6)
+                             :publisher (book-row 7)}}]
+    (if (not (empty? (get-in book-details [:info :title])))
+      book-details
+      nil)))
+
+
+(defn flipkart-details-2
+  [isbn content]
+  (let [book-row (partial flipkart-row-2 content)
+        book-details {:isbn isbn
+                      :when (java.util.Date.)
+                      :info {:image (flipkart-image content)
+                             :title (book-row 2)
+                             :author (book-row 3)
+                             :publishing-date (book-row 7)
+                             :publisher (book-row 8)}}]
+    (if (not (empty? (get-in book-details [:info :image])))
+      book-details
+      nil)))
+
+
+(defn flipkart-details
+  "Looks like there are two different page templates."
+  [isbn content]
+  (or (flipkart-details-1 isbn content)
+      (flipkart-details-2 isbn content)))
 
 
 (defn fetch-book-info
