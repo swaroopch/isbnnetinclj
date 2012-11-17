@@ -100,16 +100,6 @@
                          (swap! book-data-cache assoc-in [isbn :price site-name] (Integer/MAX_VALUE))))))
 
 
-(defn test-fetch-book-data
-  []
-  (let [prices (fetch-book-data "9781449394707")]
-    (println prices)
-    (assert (= 2062.0 (get-in prices [:price :flipkart])))
-    (assert (= 1911.0 (get-in prices [:price :infibeam])))
-    (assert (= 2018.0 (get-in prices [:price :crossword])))
-    (assert (= 2088.0 (get-in prices [:price :homeshop18])))))
-
-
 (defn fetch-book-data
   [isbn]
   (if-not (get-book-in-progress isbn)
@@ -129,6 +119,16 @@
     (do
       (log/debug isbn "already in progress")
       nil)))
+
+
+(defn test-fetch-book-data
+  []
+  (let [prices (fetch-book-data "9781449394707")]
+    (println prices)
+    (assert (= 2062.0 (get-in prices [:price :flipkart])))
+    (assert (= 1911.0 (get-in prices [:price :infibeam])))
+    (assert (= 2018.0 (get-in prices [:price :crossword])))
+    (assert (= 2088.0 (get-in prices [:price :homeshop18])))))
 
 
 (defn book-data
