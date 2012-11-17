@@ -14,8 +14,9 @@
 ;; NOTE about other stores:
 ;; - Pustak.co.in times out
 ;; - LandmarkOnTheNet.com times out
-;; - Uread.com times out and throws 500" internal server errors
+;; - Uread.com times out and throws 500 internal server errors
 ;; - Indiaplaza throws 404 error if we try to fetch prices while it works fine in a browser
+;; - Disabling uread because it sends USD instead of INR when query sent from Heroku (as opposed to my laptop)
 (def sites
   {:flipkart {:url "http://www.flipkart.com/search.php?query=%s&affid=INSwaroCom"
               :price-path [:span#fk-mprod-our-id html/content]}
@@ -26,9 +27,7 @@
    :crossword {:url "http://www.crossword.in/books/search?q=%s"
                :price-path [:span.variant-final-price html/text]}
    :bookadda {:url "http://www.bookadda.com/general-search?searchkey=%s"
-              :price-path [:span.actlprc]}
-   :uread {:url "http://www.uread.com/book/isbnnetin/%s"
-           :price-path [:p.our-price :label#ctl00_phBody_ProductDetail_lblourPrice first]}})
+              :price-path [:span.actlprc]}})
 
 
 (defn kindle-page
