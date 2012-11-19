@@ -54,7 +54,7 @@ jQuery.runisbn = function() {
     }
   }
 
-  if ( typeof(isbn) !== 'undefined' || typeof(isbn) !== 'null') ) {
+  if ( typeof(isbn) !== 'undefined' || typeof(isbn) !== 'null') {
     isbn = isbn.replace(/-/g, '');
     if ( isISBN(isbn) ) {
       show_prices(isbn);
